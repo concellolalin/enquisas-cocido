@@ -6,11 +6,11 @@ O aplicativo foi implementado co framework de desenvolvemento Symfony2, traballa
 
 Os requerimentos son:
 
-    * Servidor Apache2, ou calquera outro servidor HTTP configurado para traballar con PHP (foi desenvolvido sobre ubuntu server)
-    * Servidor de base de datos MySQL 5.5.x ou MariaDB (é posible que funcione sobre outros xestores de base de datos que soporte o framework Doctrine)
-    * Linguaxe de servidor PHP versión 5.6
-    * Extensión de Imagemagick para PHP (php5-imagick). Esta extensión é a encargada do procesamento das imaxes das enquisas escaneadas.
-    * Xestor de dependencias composer instalado e no PATH (composer.phar)
+* Servidor Apache2, ou calquera outro servidor HTTP configurado para traballar con PHP (foi desenvolvido sobre ubuntu server)
+* Servidor de base de datos MySQL 5.5.x ou MariaDB (é posible que funcione sobre outros xestores de base de datos que soporte o framework Doctrine)
+* Linguaxe de servidor PHP versión 5.6
+* Extensión de Imagemagick para PHP (php5-imagick). Esta extensión é a encargada do procesamento das imaxes das enquisas escaneadas.
+* Xestor de dependencias composer instalado e no PATH (composer.phar)
 
 
 ## Instalación
@@ -30,6 +30,7 @@ Descargar do repositorio os ficheiros fonte e actualizar as dependencias do prox
     cd enquisas-cocido/
     composer.phar update
 
+A descarga de dependencias pode adiar a instalación varios minutos (aproximadamente 150MB).
 Defina os parámetros desexados no ficheiro de configuración do aplicativo parameters.yml:
 
     $EDITOR ./app/config/parameters.yml
@@ -42,5 +43,7 @@ Crear as táboas e datos da base de datos coas ferramentas de Symfony2 e Doctrin
 
     ./app/console doctrine:schema:create
     ./app/console doctrine:fixtures:load
+
+O usuario por defecto é __admin__ e o contrasinal __password__
 
 
