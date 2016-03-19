@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edición Restaurante{% endblock %}
+
+{% block pagetitle %}Edición Restaurante{% endblock %}
+
+{% block body %}
+
+    {{ form_start(edit_form) }}
+
+
+    <div class="form-group">
+        {{ form_label(edit_form.nome) }}
+        {{ form_widget(edit_form.nome, { 'attr': {'class': 'form-control'} }) }}
+    </div>
+
+    <input type="submit" value="Editar" class="btn btn-warning"/>
+    {{ form_end(edit_form) }}
+
+    <div class="pull-right">
+
+        {{ form_start(delete_form) }}
+        <a href="{{ path('restaurante_index') }}" class="btn btn-primary">Listado</a>
+        &nbsp;&nbsp;&nbsp;
+        <input type="submit" value="Eliminar" class="btn btn-danger pull-right"/>
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}

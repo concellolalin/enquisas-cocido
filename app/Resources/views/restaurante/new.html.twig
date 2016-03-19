@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Novo Restaurante{% endblock %}
+
+{% block pagetitle %}Novo Restaurante{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.nome) }}
+            {{ form_widget(form.nome, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <input type="submit" value="Crear" class="btn btn-warning" />
+        &nbsp;&nbsp;&nbsp;
+        <a href="{{ path('restaurante_index') }}" class="btn btn-primary">Listado Restaurantes</a>
+    {{ form_end(form) }}
+
+{% endblock %}

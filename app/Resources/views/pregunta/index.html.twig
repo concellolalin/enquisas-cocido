@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Preguntas{% endblock %}
+
+{% block pagetitle %}Preguntas{% endblock %}
+
+{% block body %}
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Texto</th>
+            <th>Orde</th>
+            <th>Valores</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pregunta in preguntas %}
+            <tr>
+                <td>
+                    <a href="{{ path('pregunta_show', { 'id': pregunta.id }) }}" title="{{ pregunta.id }}">
+                        {{ pregunta.texto }}
+                    </a>
+                </td>
+                <td>{{ pregunta.orde }}</td>
+                <td>
+                    <select>
+                        {% for opcion in pregunta.opcions %}
+                            <option>{{ opcion.valor }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <a href="{{ path('pregunta_show', { 'id': pregunta.id }) }}" class="btn
+                            btn-primary">ver</a>
+
+                    <a href="{{ path('pregunta_edit', { 'id': pregunta.id }) }}" class="btn
+                            btn-success">editar</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pull-right">
+            <a href="{{ path('pregunta_new') }}" class="btn btn-primary">Crear unha pregunta</a>
+        </div>
+{% endblock %}

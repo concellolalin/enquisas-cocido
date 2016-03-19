@@ -1,0 +1,171 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cadro de Mandos{% endblock %}
+
+{% block pagetitle %}Cadro de Mandos{% endblock %}
+
+{% block body %}
+<div class="row">
+    
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Resumo
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>Total enquisas</dt>
+                    <dd>{{ total }}</dd>
+                    
+                    <dt>Total restaurantes</dt>
+                    <dd>{{ total_restaurantes }}</dd>
+                </dl>
+                
+                <br/>
+                
+                <label>Filtrar por Restaurante:</label>
+                <select id="filter_restaurante">
+                    <option value="0">TODOS</option>
+                    {% for key,val in restaurantes %}
+                        <option value="{{ val.id }}">{{ val.nome }}</option>
+                    {% endfor %}
+                </select>
+                <br/>
+
+                <a href="{{ path('enquisa_reports') }}" class="btn btn-success pull-left">
+                    <span class="fa fa-upload"></span> Ver Informes
+                </a>
+                
+                <a href="{{ path('enquisa_upload') }}" class="btn btn-primary pull-right">
+                    <span class="fa fa-upload"></span> Subir nova enquisa
+                </a>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    
+    {# <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Info
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum ab tempore in reprehenderit deserunt velit molestiae perspiciatis est laudantium harum! Deleniti perspiciatis in voluptates minus fuga vero repellendus ipsam tempora.
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div> #}
+    
+    {# FIXME: non ven de forma correcta o array #}
+    {% for pregunta in preguntas %}
+        {% if loop.index0 is even %}
+        <div class="row">
+        {% endif %}
+            <div class="col-lg-6">
+                <div class="panel panel-default panel-pregunta" data-id="{{ pregunta.id }}">
+                    <div class="panel-heading">
+                        {{ pregunta.texto }}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="chart"></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        {% if loop.index0 is odd %}
+        </div>
+        {% endif %}
+    {% endfor %}
+        
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    
+    <link href="{{ asset('assets/bower_components/morrisjs/morris.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script src="{{ asset('assets/bower_components/raphael/raphael-min.js') }}"></script>
+    <script src="{{ asset('assets/bower_components/morrisjs/morris.min.js') }}"></script>
+    
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    
+    <script>
+    /*Morris.Bar({
+        element: 'morris-bar-chart',
+        data:  preguntaStats|json_encode()|raw ,
+        xkey: 'valor',
+        ykeys: ['conta'],
+        labels: [' preguntaStats.0.texto '],
+        hideHover: 'auto',
+        resize: true
+    });
+    
+    Morris.Donut({
+        element: 'morris-bar-chart',
+        data:  preguntaStats|json_encode()|raw 
+    });*/
+    
+    // FIXME: non ven de forma correcta o array
+    $(document).ready(function() {
+        var path;
+        $('.panel-pregunta').each(function(i, panel) {
+            var dataId = $(panel).data('id');
+            path = Routing.generate('enquisa_panel', { qid: dataId });
+            $.ajax({
+                url: path,
+                success: function(result) {
+                    $('div[data-id=' + dataId + '] div.chart').html('');
+                    
+                    Morris.Donut({
+                        element: $('div[data-id=' + dataId + '] div.chart'),
+                        data:  result.stats 
+                    });
+                },
+                dataType: 'json'
+            });
+        });
+        
+        $('#filter_restaurante').change(function(evt) {
+            evt.stopPropagation();
+            
+            var restauranteId = $(this).val();
+            
+            $('.panel-pregunta').each(function(i, panel) {
+                var dataId = $(panel).data('id');
+                path = Routing.generate('enquisa_panel_filtered', { qid: dataId, rid: restauranteId });
+                console.log(path);
+                
+                $('div[data-id=' + dataId + '] div.chart').html('<p>Cargando...</p>');
+                
+                $.ajax({
+                    url: path,
+                    success: function(result) {
+                        $('div[data-id=' + dataId + '] div.chart').html('');
+                        
+                        Morris.Donut({
+                            element: $('div[data-id=' + dataId + '] div.chart'),
+                            data:  result.stats 
+                        });
+                        
+                        console.log(result.stats);
+                    },
+                    dataType: 'json'
+                });
+            });
+            
+        });
+    });
+    </script>
+{% endblock %}

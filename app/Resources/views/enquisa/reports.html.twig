@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Informes por Restaurante{% endblock %}
+
+{% block pagetitle %}Informes por Restaurante{% endblock %}
+
+{% block body %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Accións</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for restaurante in restaurantes %}
+            <tr>
+                <td>{{ restaurante.nome }}</td>
+                <td>
+                        <a href="{{ path('enquisa_report', { 'rid': restaurante.id }) }}" class="btn
+                        btn-primary"><i class="fa fa-file-text-o"></i> Ver no navegador</a>
+
+                        <a href="{{ path('enquisa_pdf', { 'rid': restaurante.id }) }}" class="btn
+                        btn-warning"><i class="fa fa-file-pdf-o"></i>
+                            Descargar en PDF</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

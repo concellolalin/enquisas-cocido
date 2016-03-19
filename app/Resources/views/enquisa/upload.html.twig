@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Subir Enquisa{% endblock %}
+
+{% block pagetitle %}Subir Enquisa{% endblock %}
+
+{% block body %}
+
+    {{ form_start(upload_form) }}
+    
+        <div class="form-group">
+            {{ form_label(upload_form.restaurante) }}
+            {{ form_widget(upload_form.restaurante, { 'attr': {'class': 'form-control'} }) }}    
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(upload_form.ficheiro) }}
+            {{ form_widget(upload_form.ficheiro) }}                
+        </div>
+        
+        {# { form_widget(upload_form) } #}
+        
+        <button type="submit" class="btn btn-primary"><span class="fa fa-upload"></span> Subir</button>        
+        
+    {{ form_end(upload_form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script type="text/javascript" src="{{ asset('assets/bower_components/bootstrap-filestyle/src/bootstrap-filestyle.min.js') }}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $(":file").filestyle({input: false, buttonText: " Subir enquisa", iconName: "fa fa-file"});
+    });
+    </script>
+    
+{% endblock %}

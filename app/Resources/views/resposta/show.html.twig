@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Resposta{% endblock %}
+
+{% block pagetitle %}Resposta{% endblock %}
+
+{% block body %}
+
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ respostum.id }}</td>
+                <td>{{ respostum.enquisa.ficheiro }}</td>
+                <td>{{ respostum.opcion.valor }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('resposta_index') }}" class="btn btn-primary">Listado</a>
+        </li>
+        <li>
+            <a href="{{ path('resposta_edit', { 'id': respostum.id }) }}" class="btn btn-warning">Editar</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

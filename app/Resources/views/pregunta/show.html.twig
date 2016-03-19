@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pregunta{% endblock %}
+
+{% block pagetitle %}Pregunta{% endblock %}
+
+{% block body %}
+    <h1>Pregunta</h1>
+
+    <table class="table table-striped table-bordered">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ preguntum.id }}</td>
+        </tr>
+        <tr>
+            <th>Texto</th>
+            <td>{{ preguntum.texto }}</td>
+        </tr>
+        <tr>
+            <th>Orde</th>
+            <td>{{ preguntum.orde }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <a href="{{ path('pregunta_index') }}" class="btn btn-primary">Listado</a>
+
+        <a href="{{ path('pregunta_edit', { 'id': preguntum.id }) }}" class="btn btn-warning">Editar</a>
+
+        {{ form_start(delete_form) }}
+        <input type="submit" value="Eliminar" class="btn btn-danger pull-right"/>
+        {{ form_end(delete_form) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar enquisa{% endblock %}
+
+{% block pagetitle %}Revisar Enquisa{% endblock %}
+
+{% block body %}
+
+    {{ form_start(edit_form) }}
+
+        <div class="form-group">
+            {{ form_label(edit_form.restaurante) }}
+            {{ form_widget(edit_form.restaurante, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(edit_form.nome) }}
+            {{ form_widget(edit_form.nome, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(edit_form.ficheiro) }}
+            {{ form_widget(edit_form.ficheiro, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="form-group checkbox">
+            <label for="enquisa_procesada">
+                {{ form_widget(edit_form.procesada) }}
+                Procesada
+            </label>
+        </div>
+
+        <br/>
+
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Pregunta</th>
+                    <th>Resposta</th>
+                    <th>Correxir</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for pregunta in preguntas %}
+
+                {% set resposta = null %}
+
+                {% for resp in enquisa.respostas %}
+                    {% if resp.opcion != null and resp.opcion.pregunta.id == pregunta.id  %}
+                        {% set resposta = resp %}
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td>{{ pregunta.texto }}</td>
+                    <td>{% if resposta != null %}{{ resposta.opcion.valor }}{% else %}<span class="label label-warning">Marca non detectada</span>{% endif %}</td>
+                    <td>
+                        <input type="hidden" name="pregunta[]" value="{{ pregunta.id }}" />
+                        <select name="opcion[]">
+                            <option value="-1"></option>
+                            {% for opcion in pregunta.opcions %}
+                                <option value="{{ opcion.id }}" {% if resposta != null and opcion.id == resposta.opcion.id
+                                %}selected="selected"{% endif
+                                %}>{{
+                                    opcion.valor
+                                    }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#enquisaModal">
+                <span class="fa fa-file-pdf-o"></span> Ver enquisa escaneada
+            </button>
+
+            <a href="{{ path('enquisa_index') }}" class="btn btn-primary">Listado</a>
+            <input type="submit" value="Editar" class="btn btn-warning" />
+        </div>
+    {{ form_end(edit_form) }}
+
+    <br/>
+
+    <div class="col-md-12">
+        {{ form_start(delete_form) }}
+        <input type="submit" value="Eliminar" class="btn btn-danger">
+        {{ form_end(delete_form) }}
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="enquisaModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Detalle enquisa</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        {# <img src="{{ asset('uploads/enquisas/' ~ enquisa.ficheiro ~ '.png') }}" alt="" class="img-responsive" /> #}
+                        <img src="{{ path('enquisa_rotate', {'filename': enquisa.ficheiro}) }}" alt="" class="img-responsive" />
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Pechar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}

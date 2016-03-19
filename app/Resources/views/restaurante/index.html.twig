@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Restaurantes{% endblock %}
+
+{% block pagetitle %}Restaurantes{% endblock %}
+
+{% block body %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Accións</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for restaurante in restaurantes %}
+            <tr>
+                <td><a href="{{ path('restaurante_show', { 'id': restaurante.id }) }}">{{ restaurante.nome }}</a></td>
+                <td>
+
+                            <a href="{{ path('restaurante_show', { 'id': restaurante.id }) }}" class="btn
+                            btn-primary">ver</a>
+
+                            <a href="{{ path('restaurante_edit', { 'id': restaurante.id }) }}" class="btn
+                            btn-warning">editar</a>
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div>
+            <a href="{{ path('restaurante_new') }}" class="btn btn-warning">Engadir novo restaurante</a>
+        </div>
+{% endblock %}

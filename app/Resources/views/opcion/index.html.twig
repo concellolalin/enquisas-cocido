@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Opcións{% endblock %}
+
+{% block pagetitle %}Opcións{% endblock %}
+
+
+{% block body %}
+
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Valor</th>
+            <th>Width</th>
+            <th>Height</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for opcion in opcions %}
+            <tr>
+                <td><a href="{{ path('opcion_show', { 'id': opcion.id }) }}">{{ opcion.id }}</a></td>
+                <td>{{ opcion.valor }}</td>
+                <td>{{ opcion.width }}</td>
+                <td>{{ opcion.height }}</td>
+                <td>{{ opcion.x }}</td>
+                <td>{{ opcion.y }}</td>
+                <td>
+                    <a href="{{ path('opcion_show', { 'id': opcion.id }) }}" class="btn btn-success">ver</a>
+                    <a href="{{ path('opcion_edit', { 'id': opcion.id }) }}" class="btn btn-primary">editar</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pull-right">
+        <a href="{{ path('opcion_new') }}" class="btn btn-primary">Crear nova opción</a>
+    </div>
+{% endblock %}

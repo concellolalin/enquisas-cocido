@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Enquisas{% endblock %}
+
+{% block pagetitle %}Enquisas{% endblock %}
+
+
+{% block body %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                {# <th>Id</th> #}
+                <th>Nome</th>
+                <th>Procesada</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for enquisa in enquisas %}
+            <tr>
+                {# <td><a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}">{{ enquisa.id }}</a></td> #}
+                <td>
+                    <a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}">{{ enquisa.nome }}</a>
+                    <a href="{{ path('enquisa_rotate', {'filename': enquisa.ficheiro}) }}"><span class="fa fa-external-link"></span></a>
+                </td>
+                <td>{% if enquisa.procesada %}<i class="fa fa-check fa-2x" style="color:#030;"></i>
+                    {% else %}<i class="fa fa-exclamation-circle fa-2x" style="color:#900;"></i>
+                    {% endif %}</td>
+                
+                <td>
+                    <a href="{{ path('enquisa_show', { 'id': enquisa.id }) }}" class="btn btn-success">Ver</a>                    
+                    <a href="{{ path('enquisa_edit', { 'id': enquisa.id }) }}" class="btn btn-warning">Editar</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {#<div class="pull-right">
+        <a href="{{ path('enquisa_new') }}" class="btn btn-primary">Alta nova enquisa</a>
+    </div>#}
+{% endblock %}

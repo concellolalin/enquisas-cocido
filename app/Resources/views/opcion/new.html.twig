@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nova opción{% endblock %}
+
+{% block pagetitle %}Nova opción{% endblock %}
+
+
+{% block body %}
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.pregunta) }}
+            {{ form_widget(form.pregunta, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.valor) }}
+            {{ form_widget(form.valor, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.width) }}
+            {{ form_widget(form.width, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.height) }}
+            {{ form_widget(form.height, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.x) }}
+            {{ form_widget(form.x, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.y) }}
+            {{ form_widget(form.y, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+
+        <input type="submit" value="Crear" class="btn btn-warning" />
+    {{ form_end(form) }}
+
+    <br/>
+
+    <div class="pull-right">
+        <a href="{{ path('opcion_index') }}" class="btn btn-primary">Listado</a>
+    </div>
+{% endblock %}

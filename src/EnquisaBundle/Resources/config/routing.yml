@@ -1,0 +1,10 @@
+enquisa_homepage:
+    path:     /
+    defaults: { _controller: EnquisaBundle:Default:index }
+
+
+enquisa_pregunta:
+    resource: "@EnquisaBundle/Controller/"
+    type:     annotation
+
+

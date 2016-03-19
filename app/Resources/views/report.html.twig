@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="gl">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %} | Enquisas Cocido</title>
+
+    <style>
+        table {
+            border: 1px solid #999;
+            border-radius: 4px;
+        }
+        th {
+            background-color: #eee;
+        }
+        td, th {
+            border-bottom: 1px solid #CCC;
+            border-right: 1px solid #CCC;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('assets/logo.png') }}" alt="" width="150"
+     align="right" />
+
+    <h1 class="page-header">{% block pagetitle %}{% endblock %}</h1>
+
+    <br/><br/><br/>
+
+
+    {% block body %}{% endblock %}
+
+</body>
+
+</html>
