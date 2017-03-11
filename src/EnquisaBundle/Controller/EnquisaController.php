@@ -52,21 +52,21 @@ class EnquisaController extends Controller
      * @Method("GET")
      */
     public function dashboardAction()
-    {                
+    {
         /** @var $em Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getManager();
         $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
-        
+
         $restaurantes = $em->getRepository('EnquisaBundle:Restaurante');
         //dump($restaurantes->findAll());
-        
-        
+
+
         $totalRestaurantes = $restaurantes->getTotalRestaurantes();
         //dump($totalRestaurantes);
-        
+
         $preguntas = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntas();
         //dump($preguntas);
-                        
+
         /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
         //dump($preguntasStats);*/
 
@@ -78,7 +78,7 @@ class EnquisaController extends Controller
             //'preguntasStats' => $preguntasStats,
         ));
     }
-    
+
     /**
      * Rotar imaxe.
      *
@@ -86,32 +86,32 @@ class EnquisaController extends Controller
      * @Method("GET")
      */
     public function rotateAction(Request $request, $filename)
-    {                
+    {
         $dir = $this->container->getParameter('kernel.root_dir') .
             '/../web/uploads/enquisas';
-        
+
         $file = realpath($dir . '/' . $filename . '.png');
-        
+
         if(!file_exists($file)) {
             throw new \Exception('Ficheiro da enquisa non existe: ' . $file);
         }
-        
+
         $image = new \Imagick($file);
         // Por si fixese falta rotar a imaxe
         //$image->rotateImage(new \ImagickPixel('#00000000'), 90);
-            
-        
+
+
         $response = new Response();
         $response->headers->set('Cache-Control', 'private');
         $response->headers->set('Content-type','image/png');
         /* $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '.png";');
         $response->headers->set('Content-length', $image->getImageLength()); */
-        
+
         $response->setContent($image->getImageBlob());
 
         return $response;
     }
-    
+
     /**
      *
      * @Route("/panel/{qid}", name="enquisa_panel", options={"expose"=true})
@@ -122,14 +122,14 @@ class EnquisaController extends Controller
         /** @var $em Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getManager();
         $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
-        
+
         //$qid = $request->query->get('qid');
-        
+
         $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStats($qid);
-        
+
         /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
         dump($preguntasStats);*/
-        
+
         return new JsonResponse([
             'stats' => $preguntaStats,
         ]);
@@ -145,19 +145,19 @@ class EnquisaController extends Controller
         /** @var $em Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getManager();
         $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
-        
+
         //$qid = $request->query->get('qid');
-        
+
         if ($rid == 0) {
             $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStats($qid);
         } else {
             $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStatsByRestaurant($qid, $rid);
         }
-        
-        
+
+
         /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
         dump($preguntasStats);*/
-        
+
         return new JsonResponse([
             'stats' => $preguntaStats,
         ]);
@@ -188,7 +188,8 @@ class EnquisaController extends Controller
             foreach ($preguntaStats as $pregunta) {
                 $title = $pregunta['texto'];
                 $data[] = $pregunta['value'];
-                $label[] = $pregunta['label'] . ' %.1f%%';
+                //$label[] = $pregunta['label'] . ' %.0f%%';
+                $label[] = $this->truncateText($pregunta['label']);
             }
 
             JpGraph::load();
@@ -234,6 +235,14 @@ class EnquisaController extends Controller
         return $response;
     }
 
+    private function truncateText($text, $length=12, $dots='…') {
+      if(strlen($text) > ($length+1)) {
+        $text  = substr($text, 0, $length) . $dots;
+      }
+      
+      return $text;
+    }
+
     /**
      * Report.
      *
@@ -259,7 +268,8 @@ class EnquisaController extends Controller
         /*$preguntasStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntasStats();
         //dump($preguntasStats);*/
 
-        return $this->render('enquisa/report.html.twig', array(
+        if($rid != 0) {
+          return $this->render('enquisa/report.html.twig', array(
             'total' => $total,
             'total_restaurantes' => $totalRestaurantes,
             'total_enquisas' => count($enquisas->findBy(['restaurante' => $rid])),
@@ -267,7 +277,14 @@ class EnquisaController extends Controller
             //'restaurantes' => $restaurantes->findAll(),
             'restaurante' => $restaurantes->findOneBy(['id' => $rid]),
             //'preguntasStats' => $preguntasStats,
-        ));
+          ));
+        }
+
+      return $this->render('enquisa/report.html.twig', array(
+        'total' => $total,
+        'total_restaurantes' => $totalRestaurantes,
+        'preguntas' => $preguntas,
+      ));
     }
 
     /**
@@ -305,7 +322,7 @@ class EnquisaController extends Controller
           'restaurantes' => $restaurantes->findAll(),
         ));
     }
-    
+
 
     /**
      * Creates a new Enquisa entity.
@@ -457,11 +474,34 @@ class EnquisaController extends Controller
 
         $filename = $dir . '/' . $filename;
 
-        $filename = '/home/vifito/public_html/compromiso-calidade/enquisa/web/uploads/enquisas/Vento.pdf';
+        //$filename = '/home/vifito/public_html/compromiso-calidade/enquisas-cocido/web/uploads/enquisas/Vento.pdf';
 
         /** @var $scanner \EnquisaBundle\Service\Scanner */
         $scanner = $this->container->get('scanner');
         $scanner->calibrate($filename);
+
+        return new Response('<h1>OK</h1>');
+    }
+
+
+    /**
+     * Calibrar
+     *
+     * @Route("/extract/{filename}", name="enquisa_extract")
+     * @Method({"GET"})
+     */
+    public function extractAction(Request $request, $filename)
+    {
+        //dump($scanner);
+        $dir = $this->container->getParameter('kernel.root_dir') .
+            '/../web/uploads/enquisas';
+
+        $filename = $dir . '/' . $filename;
+
+        /** @var $scanner \EnquisaBundle\Service\Scanner */
+        $scanner = $this->container->get('scanner');
+        $scanner->setFilename($filename);
+        $scanner->extractPages();
 
         return new Response('<h1>OK</h1>');
     }

@@ -14,6 +14,17 @@
             </tr>
         </thead>
         <tbody>
+        <tr>
+            <td>XERAL</td>
+            <td>
+                <a href="{{ path('enquisa_report', { 'rid': 0 }) }}" class="btn
+                        btn-primary"><i class="fa fa-file-text-o"></i> Ver no navegador</a>
+
+                <a href="{{ path('enquisa_pdf', { 'rid': 0 }) }}" class="btn
+                        btn-warning"><i class="fa fa-file-pdf-o"></i>
+                    Descargar en PDF</a>
+            </td>
+        </tr>
         {% for restaurante in restaurantes %}
             <tr>
                 <td>{{ restaurante.nome }}</td>

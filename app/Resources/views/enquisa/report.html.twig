@@ -1,8 +1,7 @@
 {% extends 'report.html.twig' %}
 
-{% block title %}Informe do restaurante {{ restaurante.nome }}{% endblock %}
-
-{% block pagetitle %}Informe do restaurante {{ restaurante.nome }}{% endblock %}
+{% block title %}{% if restaurante is not empty %}Informe do restaurante {{ restaurante.nome }}{% else %}Informe enquisas do Cocido{% endif %}{% endblock %}
+{% block pagetitle %}{% if restaurante is not empty %}Informe do restaurante {{ restaurante.nome }}{% else %}Informe enquisas do Cocido{% endif %}{% endblock %}
 
 {% block body %}
 
@@ -10,15 +9,17 @@
         <tr>
             <td align="right"><strong>Total enquisas:</strong></td>
             <td align="right">{{ total }}</td>
-        </tr>
-        <tr>
             <td align="right"><strong>Total restaurantes:</strong></td>
             <td align="right">{{ total_restaurantes }}</td>
         </tr>
+        {% if restaurante is not empty %}
         <tr>
             <td align="right"><strong>{{ restaurante.nome }}:</strong></td>
             <td align="right">{{ total_enquisas }}</td>
+            <td></td>
+            <td></td>
         </tr>
+        {% endif %}
     </table>
 
     <br/><br/>
@@ -28,14 +29,16 @@
         <table width="720" align="center">
         <thead>
         <tr>
-            <th colspan="2" align="center">
+            <th {% if restaurante is not empty %}colspan="2"{% endif %} align="center">
                 <strong>{{ pregunta.texto }}</strong>
             </th>
         </tr>
         <tr>
+            {% if restaurante is not empty %}
             <th align="center">
                 <strong>{{ restaurante.nome }}</strong>
             </th>
+            {% endif %}
             <th align="center">
                 <strong>Resultados xerais</strong>
             </th>
@@ -44,10 +47,12 @@
 
         <tbody>
         <tr>
+            {% if restaurante is not empty %}
             <td align="center">
                 <img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('enquisa_piechart', { 'qid': pregunta.id, 'rid': restaurante.id, 'style': 'VividTheme' })
                 }}"/>
             </td>
+            {% endif %}
             <td align="center">
                 <img src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('enquisa_piechart', { 'qid': pregunta.id, 'rid': 0, 'style': 'UniversalTheme'
                     })

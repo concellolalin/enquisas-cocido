@@ -47,7 +47,7 @@ FROM EnquisaBundle\Entity\Opcion opcion
 JOIN opcion.respostas resposta	
 JOIN opcion.pregunta pregunta
 WHERE pregunta.id = :preguntaId
-GROUP BY opcion.valor, pregunta.texto
+GROUP BY opcion.valor, pregunta.texto, opcion.id
 ORDER BY opcion.id
 DQL;
 
@@ -70,7 +70,7 @@ JOIN resposta.enquisa enquisa
 JOIN enquisa.restaurante restaurante
 WHERE pregunta.id = :preguntaId
     AND restaurante.id = :restauranteId
-GROUP BY opcion.valor, pregunta.texto
+GROUP BY opcion.valor, pregunta.texto, opcion.id
 ORDER BY opcion.id
 DQL;
 

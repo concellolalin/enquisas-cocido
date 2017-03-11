@@ -22,9 +22,9 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "2.0.x-dev",
-        "doctrine/doctrine-fixtures-bundle": "dev-master",
+        "doctrine/doctrine-fixtures-bundle": "2.3.*",
         "friendsofsymfony/jsrouting-bundle": "~1.5",
-        "jpgraph/jpgraph": "dev-master",
+        "jpgraph/jpgraph": "4.0.2",
         "spipu/html2pdf": "^4.5",
         "guzzlehttp/guzzle": "~6.0"
     },

@@ -35,9 +35,12 @@
         </tbody>
     </table>
 
-    <ul>
+    <ul class="list-unstyled">
         <li>
             <a href="{{ path('opcion_index') }}" class="btn btn-primary">Listado</a>
+        </li>
+        <li>
+          <a href="{{ path('opcion_new') }}" class="btn btn-primary">Crear nova opción</a>
         </li>
         <li>
             <a href="{{ path('opcion_edit', { 'id': opcion.id }) }}" class="btn btn-warning">Editar</a>
