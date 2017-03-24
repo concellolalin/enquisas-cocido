@@ -170,26 +170,37 @@ class EnquisaController extends Controller
      */
     public function piechartAction(Request $request, $qid, $rid, $style)
     {
-        /** @var $em Doctrine\ORM\EntityManager */
+        /** @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getManager();
         //$total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
         //$qid = $request->query->get('qid');
 
         if ($rid == 0) {
             $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStats($qid);
+            $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal();
         } else {
             $preguntaStats = $em->getRepository('EnquisaBundle:Enquisa')->getPreguntaStatsByRestaurant($qid, $rid);
+            $total = $em->getRepository('EnquisaBundle:Enquisa')->getTotal($rid);
         }
 
         if(count($preguntaStats) > 0) {
-            $data = [];
+            $data  = [];
             $label = [];
-            $title = '';
+            //$title = '';
+            $answd = 0;
             foreach ($preguntaStats as $pregunta) {
-                $title = $pregunta['texto'];
+                //$title = $pregunta['texto'];
                 $data[] = $pregunta['value'];
                 //$label[] = $pregunta['label'] . ' %.0f%%';
                 $label[] = $this->truncateText($pregunta['label']);
+
+                // Controlar respostas en branco NS/NC
+                $answd += $pregunta['value'];
+            }
+
+            if($total > $answd) {
+                $label[] = 'NS/NC';
+                $data[]  = $total - $answd;
             }
 
             JpGraph::load();
@@ -198,11 +209,13 @@ class EnquisaController extends Controller
 
             $graph = new \PieGraph(350, 280);
 
-            if($style == 'VividTheme') {
+            /*if($style == 'VividTheme') {
                 $theme_class = new \VividTheme;
             } else {
                 $theme_class = new \UniversalTheme; //\VividTheme;
-            }
+            }*/
+            $theme_class = new \UniversalTheme; // Forzamos a que sexan iguais
+
             $graph->SetTheme($theme_class);
             $graph->legend->SetPos(0.5, 0.97, 'center', 'bottom');
             $graph->legend->SetColumns(3);
@@ -217,7 +230,7 @@ class EnquisaController extends Controller
             $p1->SetSize(0.4);
             $p1->SetCenter(0.5, 0.47);
             $p1->value->Show();
-            $p1->value->SetFont(FF_ARIAL, FS_NORMAL, 12);
+            $p1->value->SetFont(FF_ARIAL, FS_NORMAL, 11);
 
             ob_start();
             $graph->Stroke();
@@ -239,7 +252,7 @@ class EnquisaController extends Controller
       if(strlen($text) > ($length+1)) {
         $text  = substr($text, 0, $length) . $dots;
       }
-      
+
       return $text;
     }
 
@@ -300,7 +313,7 @@ class EnquisaController extends Controller
         $http = $client->request('GET', $url);
         $html = $http->getBody();
 
-        $html2pdf = new HTML2PDF('L','A4','es');
+        $html2pdf = new HTML2PDF('P','A4','es');
         $html2pdf->WriteHTML($html);
         $html2pdf->Output('exemple.pdf');
 

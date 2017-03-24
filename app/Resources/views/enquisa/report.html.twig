@@ -1,7 +1,7 @@
 {% extends 'report.html.twig' %}
 
-{% block title %}{% if restaurante is not empty %}Informe do restaurante {{ restaurante.nome }}{% else %}Informe enquisas do Cocido{% endif %}{% endblock %}
-{% block pagetitle %}{% if restaurante is not empty %}Informe do restaurante {{ restaurante.nome }}{% else %}Informe enquisas do Cocido{% endif %}{% endblock %}
+{% block title %}{% if restaurante is not empty %}Informe {{ restaurante.nome }}{% else %}Informe enquisas do Cocido{% endif %}{% endblock %}
+{% block pagetitle %}{% if restaurante is not empty %}Informe {{ restaurante.nome }}{% else %}Informe enquisas do Cocido{% endif %}{% endblock %}
 
 {% block body %}
 

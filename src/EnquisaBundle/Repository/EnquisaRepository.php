@@ -29,15 +29,36 @@ class EnquisaRepository extends \Doctrine\ORM\EntityRepository
         
         
     }
-    
-    public function getTotal()
-    {        
-        $query = $this->getEntityManager()->createQuery('SELECT COUNT(e.id) FROM EnquisaBundle\Entity\Enquisa e');
+
+    /**
+     *
+     * @param null|int $rid
+     * @return int
+     */
+    public function getTotal($rid=null)
+    {
+        // Contar enquisas dun restaurante
+        if($rid !== null) {
+            $dql =<<<DQL
+SELECT count(enquisa.id) AS value
+FROM EnquisaBundle\Entity\Enquisa enquisa
+JOIN enquisa.restaurante restaurante
+WHERE restaurante.id = :restauranteId
+DQL;
+
+            $query = $this->getEntityManager()->createQuery($dql);
+            $query->setParameters(array(
+                ':restauranteId' => $rid,
+            ));
+        } else {
+            $dql = 'SELECT COUNT(e.id) FROM EnquisaBundle\Entity\Enquisa e';
+            $query = $this->getEntityManager()->createQuery($dql);
+        }
+
         $count = $query->getSingleScalarResult();
         
         return $count;
     }
-    
     
     public function getPreguntaStats($preguntaId)
     {        
